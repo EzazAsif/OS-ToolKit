@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Electron Process Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-transparent min-h-screen p-0 font-sans overflow-hidden">
+    <div class="rounded-[20px] bg-black shadow-xl overflow-hidden">
+      <!-- Custom Titlebar -->
+      <div
+        class="flex items-center justify-between h-10 bg-gray-800 px-4 rounded-t-[20px] text-white select-none"
+        style="-webkit-app-region: drag"
+      >
+        <div class="text-sm font-semibold">Process Monitor</div>
+        <div class="flex space-x-2" style="-webkit-app-region: no-drag">
+          <button
+            class="w-3.5 h-3.5 bg-yellow-400 rounded-full hover:opacity-80"
+            id="minimize-btn"
+          ></button>
+          <button
+            class="w-3.5 h-3.5 bg-green-500 rounded-full hover:opacity-80 flex items-center justify-center"
+            id="maximize-btn"
+            title="Maximize"
+          ></button>
+          <button
+            class="w-3.5 h-3.5 bg-red-500 rounded-full hover:opacity-80"
+            id="close-btn"
+          ></button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="max-w-4xl mx-auto bg-white rounded-b-lg shadow-lg p-6">
+        <!-- Back Button -->
+        <button
+          onclick="goBack()"
+          class="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-full font-medium transition"
+        >
+          ← Back
+        </button>
+
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Running Processes</h1>
+        <div
+          id="process-container"
+          class="space-y-8 overflow-y-auto max-h-[500px] pr-2"
+        >
+          <!-- Process categories will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="renderer.js"></script>
+
+    <script>
+      document.getElementById("minimize-btn").addEventListener("click", () => {
+        window.electronAPI.minimize();
+      });
+
+      document.getElementById("close-btn").addEventListener("click", () => {
+        window.electronAPI.close();
+      });
+
+      const maximizeBtn = document.getElementById("maximize-btn");
+      maximizeBtn.addEventListener("click", () => {
+        window.electronAPI.toggleMaximize();
+      });
+
+      // Update maximize button state
+      window.electronAPI.onWindowMaximized(() => {
+        maximizeBtn.title = "Restore";
+      });
+
+      window.electronAPI.onWindowRestored(() => {
+        maximizeBtn.title = "Maximize";
+      });
+
+      // Go Back button logic
+      function goBack() {
+        // You can customize this to route within your app or use Electron navigation
+        window.history.back(); // or use your own custom navigation
+      }
+    </script>
+  </body>
+</html>
