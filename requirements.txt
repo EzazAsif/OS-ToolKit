@@ -2,3 +2,4 @@ Flask
 psutil
 flask-socketio
 eventlet
+pywebview

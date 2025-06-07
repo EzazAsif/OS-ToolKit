@@ -1,80 +1,4 @@
 const socket = io("http://127.0.0.1:5000");
-const categoryKeywords = {
-  "System Processes": [
-    "system",
-    "svchost",
-    "services",
-    "wininit",
-    "lsass",
-    "csrss",
-    "smss",
-    "dwm",
-    "taskhost",
-    "explorer",
-    "winlogon",
-    "kernel",
-    "init",
-    "systemd",
-    "launchd",
-  ],
-  "User Applications": [
-    "chrome",
-    "firefox",
-    "code",
-    "electron",
-    "spotify",
-    "discord",
-    "slack",
-    "zoom",
-    "teams",
-    "notepad",
-    "word",
-    "excel",
-    "outlook",
-    "safari",
-    "opera",
-    "edge",
-    "photoshop",
-    "vlc",
-    "skype",
-    "steam",
-    "dropbox",
-
-    // Games added here
-    "epicgameslauncher",
-    "origin",
-    "battle.net",
-    "uplay",
-    "gog",
-    "minecraft",
-    "fortnite",
-    "leagueoflegends",
-    "valorant",
-    "overwatch",
-    "dota2",
-    "csgo",
-    "callofduty",
-    "amongus",
-    "apex",
-    "roblox",
-    "witcher",
-    "skyrim",
-    "gta",
-  ],
-  "Background Services": [
-    "antivirus",
-    "backup",
-    "update",
-    "sync",
-    "cloud",
-    "agent",
-    "daemon",
-    "service",
-    "monitor",
-    "scheduler",
-    "updater",
-  ],
-};
 
 function showToast(message, duration = 3000) {
   const toast = document.getElementById("toast");
@@ -124,24 +48,29 @@ function createProcessItem(proc) {
 }
 
 function categorizeProcesses(processes) {
-  const categories = {};
-  // Initialize categories from keys
-  Object.keys(categoryKeywords).forEach((cat) => (categories[cat] = []));
-  categories["Other Processes"] = [];
+  const categories = {
+    "System Processes": [],
+    "User Applications": [],
+    "Other Processes": [],
+  };
 
   processes.forEach((proc) => {
     const name = proc.name.toLowerCase();
-    let categorized = false;
 
-    for (const [category, keywords] of Object.entries(categoryKeywords)) {
-      if (keywords.some((kw) => name.includes(kw))) {
-        categories[category].push(proc);
-        categorized = true;
-        break;
-      }
-    }
-
-    if (!categorized) {
+    if (
+      name.includes("system") ||
+      name.includes("svchost") ||
+      name.includes("services")
+    ) {
+      categories["System Processes"].push(proc);
+    } else if (
+      name.includes("chrome") ||
+      name.includes("firefox") ||
+      name.includes("code") ||
+      name.includes("electron")
+    ) {
+      categories["User Applications"].push(proc);
+    } else {
       categories["Other Processes"].push(proc);
     }
   });

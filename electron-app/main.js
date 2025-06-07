@@ -1,18 +1,50 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
+let win;
+
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  win = new BrowserWindow({
+    width: 1000,
+    height: 800,
+    frame: false,
+    transparent: true,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   });
 
-  // 🔥 Correct path to index.html
   win.loadFile(path.join(__dirname, "index.html"));
+
+  // Send maximize/restore events to renderer
+  win.on("maximize", () => {
+    win.webContents.send("window-maximized");
+  });
+
+  win.on("unmaximize", () => {
+    win.webContents.send("window-restored");
+  });
+
+  // IPC handlers
+  ipcMain.on("window:minimize", () => {
+    if (win) win.minimize();
+  });
+
+  ipcMain.on("window:close", () => {
+    if (win) win.close();
+  });
+
+  ipcMain.on("window-toggle-maximize", () => {
+    if (win) {
+      if (win.isMaximized()) {
+        win.unmaximize();
+      } else {
+        win.maximize();
+      }
+    }
+  });
 }
 
 app.whenReady().then(createWindow);
