@@ -1,0 +1,11 @@
+{
+  "name": "os-desktop-app",
+  "version": "1.0.0",
+  "main": "electron-app/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^29.0.0"
+  }
+}
