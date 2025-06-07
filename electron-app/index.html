@@ -3,30 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <title>Electron Process Monitor</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-      }
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      li {
-        margin-bottom: 8px;
-      }
-      .pid {
-        font-weight: bold;
-        margin-right: 10px;
-      }
-      .cpu {
-        color: green;
-      }
-    </style>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <h1>Running Processes</h1>
-    <ul id="process-list"></ul>
+  <body class="bg-gray-100 min-h-screen p-8 font-sans">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+      <h1 class="text-3xl font-bold mb-6 text-gray-800">Running Processes</h1>
+
+      <div id="process-container" class="space-y-8">
+        <!-- Process categories will be injected here -->
+      </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div
+      id="toast"
+      class="fixed bottom-6 right-6 hidden bg-gray-800 text-white px-5 py-3 rounded shadow-lg"
+    ></div>
 
     <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
     <script src="renderer.js"></script>
