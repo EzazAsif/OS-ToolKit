@@ -18,7 +18,7 @@ def send_processes():
     while True:
         processes = get_processes()
         socketio.emit('process_data', processes)
-        eventlet.sleep(0.5)
+        eventlet.sleep(1)
 
 @socketio.on('connect')
 def on_connect():
